@@ -25,7 +25,7 @@ volume=`hdiutil mount ${tmp_file} | tail -n1 | perl -nle '/(\/Volumes\/[^ ]+)/; 
 echo "Volume: ${volume} "
 
 # Locate .app folder and move to /Applications
-app=`find ${volume}/. -regex ".*.\(app\)" -maxdepth 1  -type d -print0`
+app=`find ${volume} -regex ".*.\(app\)" -maxdepth 1  -type d -print0`
 echo "Copying `echo ${app} | awk -F/ '{print $NF}'` into $apps_folder..."
 cp -ir ${app} ${apps_folder}
 
