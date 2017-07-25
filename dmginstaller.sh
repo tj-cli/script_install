@@ -22,16 +22,20 @@ curl -# -L -o ${tmp_file} ${url}
 
 echo "Mounting image..."
 volume=`hdiutil mount ${tmp_file} | tail -n1 | perl -nle '/(\/Volumes\/[^ ]+)/; print $1'`
-echo "Volume: ${volume} "
 
 # Locate .app folder and move to /Applications
 app=`find ${volume} -regex ".*.\(app\)" -maxdepth 1  -type d -print0`
 echo "Copying `echo ${app} | awk -F/ '{print $NF}'` into $apps_folder..."
-cp -ir ${app} ${apps_folder}
 
-# Unmount volume, delete temporal file
+copy_app(){
+    cp -R "${app}" "${apps_folder}"
+}
+
+copy_app
+
+## Unmount volume, delete temporal file
 echo "Cleaning up..."
-#hdiutil unmount ${volume} -quiet
+hdiutil unmount ${volume} -quiet
 rm ${tmp_file}
 
 echo "Done!"
