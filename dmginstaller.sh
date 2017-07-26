@@ -3,7 +3,7 @@
 set -e
 
 usage (){
-    echo "Usage: sh install --[options] [url]"
+    echo "Usage: sh dmg_installer --[options] [url]"
     echo "Options: "
     echo " -mp | --mac-plugin   : Install a mac Internet plugin from dmg file."
     echo " -ma | --mac-app      : Install a mac app from dmg file."
