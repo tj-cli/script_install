@@ -2,10 +2,6 @@
 
 set -e
 
-# Move all this to a single bash script to avoid duplication
-# and depending on the opt parsed --mac-plugin --mac-app --linux-plugin
-# call the function to install the app or plugin
-
 usage (){
     echo "Usage: sh install --[options] [url]"
     echo "Options: "
