@@ -67,7 +67,7 @@ download_and_install_mac() {
     echo "Downloading $url..."
     curl -# -L -o ${tmp_file} ${url}
     echo "Mounting image..."
-    volume=`hdiutil mount ${tmp_file} | tail -n1 | perl -nle '/(\/Volumes\/[^ ]+)/; print $1'`
+    volume=`hdiutil mount -nobrowse ${tmp_file} | tail -n1 | perl -nle '/(\/Volumes\/[^ ]+)/; print $1'`
 
     # Locate .app folder and move to /Applications
     app=`find ${volume} -regex ".*.\(app\)" -maxdepth 1  -type d -print0`
