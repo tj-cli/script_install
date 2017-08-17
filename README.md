@@ -1,8 +1,8 @@
-# dmg_installer
+# installer commands
 
-Use Command line to install dmg files or Install internet plugins for MAC.
+Use Command line to install dmg files, gecko driver or Install internet plugins for MAC.
 
-Installation can also be done on Linux (Mozilla plugins only) using a tar archive url.
+Installation can also be done for Linux (Mozilla plugins only) using a tar archive url.
 
 Usage:
     
