@@ -2,12 +2,14 @@
 
 set -e
 
+
 usage (){
-    echo "Usage: sh dmg_installer --[options] [url]"
+    echo "Usage: sh install --[options] [url]"
     echo "Options: "
     echo " -mp | --mac-plugin   : Install a mac Internet plugin from dmg file."
     echo " -ma | --mac-app      : Install a mac app from dmg file."
     echo " -l  | --linux-plugin : Install a mozilla linux plugin from tar.gz file."
+    echo " -g  | --gecko-driver : Install a gecko driver from tar.gz file."
     echo " -h  | --help         : Show help."
 }
 
@@ -59,6 +61,33 @@ download_and_install_linux(){
     echo ${success_msg}
 }
 
+download_and_gecko_driver(){
+    dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+    # Generate a random file name
+    tmp_file=/tmp/`openssl rand -base64 10 | tr -dc '[:alnum:]'`.tar.gz
+    tmp_dir=`mktemp -d`
+    # check if tmp dir was created
+    if [[ ! "$tmp_dir" || ! -d "$tmp_dir" ]]; then
+      echo "Could not create temp dir : $tmp_dir"
+      exit 1
+    fi
+    # Download file
+    echo "Downloading $url..."
+    curl -# -L -o ${tmp_file} ${url}
+     # Unzip the file in the temp dir
+    tar -xvf ${tmp_file} -C ${tmp_dir}
+    cd ${tmp_dir}
+    chmod a+x geckodriver
+    cp -fr geckodriver /usr/local/bin/geckodriver
+    line='export PATH="/usr/local/bin/geckodriver:${PATH}"'
+    grep "$line" ~/.bash_profile||echo ${line} >> ~/.bash_profile
+    #Clean up
+    rm ${tmp_file}
+    rm -rf ${tmp_dir}
+
+    echo ${success_msg}
+}
+
 download_and_install_mac() {
     # Generate a random file name
     tmp_file=/tmp/`openssl rand -base64 10 | tr -dc '[:alnum:]'`.dmg
@@ -72,7 +101,7 @@ download_and_install_mac() {
     # Locate .app folder and move to /Applications
     app=`find ${volume} -regex ".*.\(app\)" -maxdepth 1  -type d -print0`
 
-    if [ "$plugin_dir" == "true" ]; then
+    if [ "$is_plugin" == "true" ]; then
         app=`find "${app}" -regex ".*.\(plugin\)" -maxdepth 3  -type d -print0`
     fi
 
@@ -108,9 +137,13 @@ case ${option} in
     success_msg='App installed successfully'
     download_and_install_mac
     shift;;
+    -g|--gecko-driver)
+    success_msg='Driver downloaded'
+    download_and_gecko_driver
+    shift;;
     -mp|--mac-plugin)
     out_dir="$HOME/Library/Internet Plug-Ins"
-    plugin_dir="true"
+    is_plugin="true"
     success_msg='Plugin installed successfully'
     download_and_install_mac
     shift;;
