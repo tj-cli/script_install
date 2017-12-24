@@ -4,6 +4,18 @@ Use Command line to install dmg files, gecko driver or Install internet plugins 
 
 Installation can also be done for Linux (Mozilla plugins only) using a tar archive url.
 
+Installation:
+```
+git clone https://github.com/jackton1/script_install.git    
+```
+
+Add Permission:
+
+```
+cd script_install 
+chmod a+x installer.sh
+```
+
 Usage:
     
     ./installer --mac-app https://download.mozilla.org/?product=firefox-54.0.1-SSL&os=osx&lang=en-US
