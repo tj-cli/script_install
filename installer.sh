@@ -15,7 +15,7 @@ usage (){
 
 if [[ $# -lt 2 ]]; then
   usage
-  exit 1
+  return 1
 else
     url=$2;
     plugin_dir="";
@@ -31,7 +31,7 @@ download_and_install_linux(){
     # check if tmp dir was created
     if [[ ! "$tmp_dir" || ! -d "$tmp_dir" ]]; then
       echo "Could not create temp dir : $tmp_dir"
-      exit 1
+      return 1
     fi
 
     mozilla_dir=~/.mozilla/;
@@ -69,7 +69,7 @@ download_and_gecko_driver(){
     # check if tmp dir was created
     if [[ ! "$tmp_dir" || ! -d "$tmp_dir" ]]; then
       echo "Could not create temp dir : $tmp_dir"
-      exit 1
+      return 1
     fi
     # Download file
     echo "Downloading $url..."
@@ -107,7 +107,7 @@ download_and_install_mac() {
 
     if [ ! -d "$out_dir" ]; then
         echo "Sorry $out_dir directory not found";
-        exit 1;
+        return 1;
     else
         echo "Copying `echo ${app} | awk -F/ '{print $NF}'` into $out_dir..."
         cp -r "${app}" "${out_dir}"
@@ -117,7 +117,6 @@ download_and_install_mac() {
     hdiutil unmount ${volume} -quiet
     rm ${tmp_file}
     echo ${success_msg}
-
 }
 
 
